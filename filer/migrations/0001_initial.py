@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             name='ClipboardItem',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('clipboard', models.ForeignKey(verbose_name='clipboard', to='filer.Clipboard')),
+                ('clipboard', models.ForeignKey(verbose_name='clipboard', to='filer.Clipboard', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'clipboard item',
