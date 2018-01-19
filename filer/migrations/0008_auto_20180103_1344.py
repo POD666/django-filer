@@ -16,4 +16,9 @@ class Migration(migrations.Migration):
             name='file_ptr',
             field=models.OneToOneField(serialize=False, related_name='filer_image_file', parent_link=True, to='filer.File', primary_key=True),
         ),
+        migrations.AlterField(
+            model_name='folderpermission',
+            name='group',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='filer_folder_permissions', to='auth.Group', verbose_name='group'),
+        ),
     ]
