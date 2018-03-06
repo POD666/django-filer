@@ -7,10 +7,9 @@ import django
 from django.utils import six
 try:
     from django.utils.functional import keep_lazy
-    _lazy = keep_lazy
 except ImportError:
     from django.utils.functional import allow_lazy
-    _lazy = allow_lazy
+    keep_lazy = allow_lazy
 
 from django.utils.text import Truncator
 
@@ -19,7 +18,7 @@ def truncate_words(s, num, end_text='...'):
     # truncate_words was removed in Django 1.5.
     truncate = end_text and ' %s' % end_text or ''
     return Truncator(s).words(num, truncate=truncate)
-truncate_words = _lazy(truncate_words, six.text_type)
+truncate_words = keep_lazy(truncate_words, six.text_type)
 
 
 LTE_DJANGO_1_8 = django.VERSION < (1, 9)
