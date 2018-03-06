@@ -8,8 +8,7 @@ from django.utils import six
 try:
     from django.utils.functional import keep_lazy
 except ImportError:
-    from django.utils.functional import allow_lazy
-    keep_lazy = allow_lazy
+    from django.utils.functional import allow_lazy as keep_lazy
 
 from django.utils.text import Truncator
 
