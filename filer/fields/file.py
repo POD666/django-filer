@@ -80,8 +80,8 @@ class AdminFileWidget(ForeignKeyRawIdWidget):
 
     def obj_for_value(self, value):
         try:
-            key = self.remote_field.get_related_field().name
-            obj = self.remote_field.to._default_manager.get(**{key: value})
+            key = self.rel.get_related_field().name
+            obj = self.rel.to._default_manager.get(**{key: value})
         except:
             obj = None
         return obj
@@ -103,14 +103,14 @@ class AdminFileWidget(ForeignKeyRawIdWidget):
 class AdminFileFormField(forms.ModelChoiceField):
     widget = AdminFileWidget
 
-    def __init__(self, remote_field, queryset, to_field_name, *args, **kwargs):
-        self.remote_field = remote_field
+    def __init__(self, rel, queryset, to_field_name, *args, **kwargs):
+        self.rel = rel
         self.queryset = queryset
         self.to_field_name = to_field_name
         self.max_value = None
         self.min_value = None
         kwargs.pop('widget', None)
-        super(AdminFileFormField, self).__init__(queryset, widget=self.widget(remote_field, site), *args, **kwargs)
+        super(AdminFileFormField, self).__init__(queryset, widget=self.widget(rel, site), *args, **kwargs)
 
     def widget_attrs(self, widget):
         widget.required = self.required
@@ -132,7 +132,6 @@ class FilerFileField(models.ForeignKey):
                 )
                 warnings.warn(msg, SyntaxWarning)
         kwargs['to'] = dfl
-        kwargs['on_delete'] = kwargs.get('on_delete', models.CASCADE)
         super(FilerFileField, self).__init__(**kwargs)
 
     def formfield(self, **kwargs):
@@ -140,7 +139,7 @@ class FilerFileField(models.ForeignKey):
         # while letting the caller override them.
         defaults = {
             'form_class': self.default_form_class,
-            'remote_field': self.remote_field,
+            'rel': self.rel,
         }
         defaults.update(kwargs)
         return super(FilerFileField, self).formfield(**defaults)
